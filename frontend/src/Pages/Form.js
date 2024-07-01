@@ -11,14 +11,16 @@ const Form = () => {
   const [numberOfTries, setNumberOfTries] = useState(1);
   const [description, setDescription] = useState('');
   const [questionType, setQuestionType] = useState('MCQ');
-  const [textAnswer, setTextAnswer] = useState('')
+  const [textAnswer, setTextAnswer] = useState('');
+  const [picture, setPicture] = useState(null);
+  const [savedImage, setSavedImage] = useState('');
 
   const handleCreateMCQ = () => {
     const saveQuestion = {
       newQuestion,
       options,
       correctOption,
-      questionType
+      questionType,
     };
     if (numberOfOptions > 0 && correctOption > 0 && correctOption <= numberOfOptions) {
       setQuestions([...questions, saveQuestion]);
@@ -32,9 +34,59 @@ const Form = () => {
     }
   };
 
+  const handleTextQuestion = () => {
+    if (newQuestion !== '') {
+      const saveQuestion = {
+        newQuestion,
+        questionType,
+      };
+      setQuestions([...questions, saveQuestion]);
+      setNewQuestion('');
+    }
+  };
+
+  const handlePhotoQuestion = async () => {
+    if (newQuestion !== '' && picture !== null) {
+      const formData = new FormData();
+      formData.append('image', picture);
+
+      try {
+        const response = await fetch('https://api.imgur.com/3/image', {
+          method: 'POST',
+          headers: {
+            Authorization: 'Client-ID YOUR_CLIENT_ID', // Replace YOUR_CLIENT_ID with your actual Imgur client ID
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+          const imageUrl = data.data.link;
+          const saveQuestion = {
+            newQuestion,
+            imageUrl,
+            questionType,
+          };
+          setQuestions([...questions, saveQuestion]);
+          setNewQuestion('');
+          setPicture(null);
+        } else {
+          console.error('Image upload failed: ', data);
+        }
+      } catch (error) {
+        console.error('Error uploading image: ', error);
+      }
+    }
+  };
+
   const handleNumberOfOptions = (e) => {
     const number = +e.target.value;
-    if (!isNaN(number) && number > -1 && number < 8) {
+    if (!isNaN(number) && number >= 0 && number < 8) {
       setNumberOfOptions(number);
       setOptions(Array(number).fill(''));
     }
@@ -47,7 +99,7 @@ const Form = () => {
 
   const handleCorrectOption = (e) => {
     const number = +e.target.value;
-    if (!isNaN(number) && number > -1 && number <= numberOfOptions) {
+    if (!isNaN(number) && number > 0 && number <= numberOfOptions) {
       setCorrectOption(number);
     }
   };
@@ -75,15 +127,11 @@ const Form = () => {
     setDescription(e.target.value);
   };
 
-  const handleTextQuestion = (e) => {
-    let newQuestions = [...questions]
-  }
-
   const renderQuestionForm = () => {
     switch (questionType) {
       case 'MCQ':
         return (
-          <div className='w-full'>
+          <div className='w-full mb-20'>
             <h1 className='text-2xl'>Enter the question</h1>
             <input
               type="text"
@@ -131,28 +179,48 @@ const Form = () => {
         );
       case 'Photo':
         return (
-          <div className='w-full'>
-            <h1 className='text-2xl'>Enter the question with Photo</h1>
-            {/* Add your form fields for question with photo here */}
+          <div className='w-full flex flex-col items-center mb-20 justify-center flex-wrap'>
+            <label className='text-2xl'>Upload Picture</label>
+            <div className='w-full'>
+              <input
+                type="file"
+                onChange={(e) => setPicture(e.target.files[0])}
+                className='text-xl py-5 mx-auto w-[55%]'
+              />
+            </div>
+            <label className='text-2xl mb-2'>Enter the question</label>
+            <input
+              type="text"
+              value={newQuestion}
+              onChange={(e) => setNewQuestion(e.target.value)}
+              className='w-3/5 px-3 py-2 border border-gray-400 rounded m-4 hover:border-blue-500'
+            />
+            <button
+              type='button'
+              onClick={handlePhotoQuestion}
+              className='border px-4 py-2 my-4 rounded-lg bg-blue-400 hover:bg-blue-600 mx-auto'
+            >
+              Add Question
+            </button>
           </div>
         );
       case 'Text':
         return (
-          <div className='w-full'>
+          <div className='w-full flex flex-col items-center mb-20'>
             <h1 className='text-2xl'>Enter the text question</h1>
             <input
-                type="text"
-                value={newQuestion}
-                className="w-3/5 px-3 py-2 border border-gray-400 rounded mt-4 mx-4 hover:border-blue-500"
-                onChange={(e) => setNewQuestion(e.target.value)}
+              type="text"
+              value={newQuestion}
+              className="w-3/5 px-3 py-2 border border-gray-400 rounded mt-4 mx-4 hover:border-blue-500"
+              onChange={(e) => setNewQuestion(e.target.value)}
             ></input>
-            <label className='text-2xl'>Enter your answer here</label>
-            <textarea
-                typeof='string'
-                value={textAnswer}
-                className="w-3/5 px-3 py-2 border border-gray-400 rounded mt-4 mx-4 hover:border-blue-500"
-                onChange={(e) => setTextAnswer(e.target.value)}
-            ></textarea>
+            <button
+              type='button'
+              onClick={handleTextQuestion}
+              className='border px-4 py-2 my-4 rounded-lg bg-blue-400 hover:bg-blue-600 mx-auto'
+            >
+              Add Question
+            </button>
           </div>
         );
       default:
@@ -171,7 +239,7 @@ const Form = () => {
             {questions.map((q, index) => (
               <div key={index} className='mt-5 mb-5 pl-7 text-left'>
                 <label className='text-3xl text-yellow-300'>Q{index + 1}. {q.newQuestion}</label>
-                {q.options.map((opt, optIndex) => (
+                {q.questionType === 'MCQ' && q.options.map((opt, optIndex) => (
                   <div key={optIndex} className="my-2 w-4/5">
                     <input
                       type="radio"
@@ -187,6 +255,21 @@ const Form = () => {
                     >{opt}</label>
                   </div>
                 ))}
+                {q.questionType === 'Photo' && (
+                  <div className="my-2 w-4/5">
+                    <img src={q.imageUrl} alt="Question related" className="my-2" />
+                  </div>
+                )}
+                {q.questionType === 'Text' && (
+                  <div className="my-2 w-4/5">
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border border-gray-400 rounded mt-4 ml-4 mr-4 hover:border-blue-500"
+                      value={textAnswer}
+                      onChange={(e) => setTextAnswer(e.target.value)}
+                    />
+                  </div>
+                )}
                 <div className='text-center my-7'>
                   <button
                     type='button'

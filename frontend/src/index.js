@@ -1,13 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './tailwind.css';
-import Paths from './Paths';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./tailwind.css";
+import Paths from "./Paths";
+import reportWebVitals from "./reportWebVitals";
+import { QuestionTypeContextProvider } from "./Context/QuestionTypeContext";
+import { QuestionsContextProvider } from "./Context/QuestionsContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Paths />
+    <QuestionTypeContextProvider>
+      <QuestionsContextProvider>
+        <Paths />
+      </QuestionsContextProvider>
+    </QuestionTypeContextProvider>
   </React.StrictMode>
 );
 
