@@ -1,14 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuestionsContext } from "../Context/QuestionsContext";
+import toast from "react-hot-toast";
 
 const ShowQuestions = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [description, setDescription] = useState(null);
 
   const { questions, setQuestions } = useQuestionsContext();
+
   const handleFormSubmit = () => {
-    // if (tries < numberOfTries) {
-    //   setSubmitted(true);
-    // }
+    if (description.numberOfTries < 1) {
+      toast.error("You can no longer submit the answers");
+      return;
+    }
+
+    // Update the number of tries
+    const updatedNumberOfTries = description.numberOfTries - 1;
+
+    // Create an updated description object
+    const updatedDescription = {
+      ...description,
+      numberOfTries: updatedNumberOfTries,
+    };
+
+    // Update the description state
+    setDescription(updatedDescription);
+
+    // Filter out previous 'details' question
+    const filteredQuestions = questions.filter(
+      (question) => question.questionType !== "details"
+    );
+
+    // Update the questions state with the updated description
+    setQuestions([...filteredQuestions, updatedDescription]);
+    toast.success("Submitted you answer successfully");
   };
 
   const handleRadioClick = (questionIndex, optIndex) => {
@@ -24,16 +49,35 @@ const ShowQuestions = () => {
     setQuestions(newQuestions);
   };
 
+  useEffect(() => {
+    const detailQuestion = questions.find(
+      (question) => question.questionType === "details"
+    );
+    if (detailQuestion) {
+      setDescription(detailQuestion);
+    }
+  }, [questions]);
+
   return (
     <div className="flex flex-col justify-center items-center w-full">
+      <div className="flex flex-row justify-between">
+        <h1 className="text-4xl text-red-500 pt-7 pb-5 px-7">{`Instruction: ${
+          description ? description.description : "Not Set"
+        }`}</h1>
+        <h1 className="text-4xl text-red-500 pt-7 pb-5 px-7 ">{`Number of tries: ${
+          description ? description.numberOfTries : "Not Set"
+        }`}</h1>
+      </div>
       {questions.map((q, index) => (
         <div
           key={index}
           className="mt-5 mb-5 text-center flex flex-col justify-center items-center w-full"
         >
-          <label className="text-3xl text-yellow-300">
-            Q{index + 1}. {q.newQuestion}
-          </label>
+          {q.questionType !== "details" && (
+            <label className="text-3xl text-yellow-300">
+              Q{index + 1}. {q.newQuestion}
+            </label>
+          )}
           {q.questionType === "mcq" &&
             q.options.map((opt, optIndex) => (
               <div key={optIndex} className="my-2 w-4/5 text-left flex">

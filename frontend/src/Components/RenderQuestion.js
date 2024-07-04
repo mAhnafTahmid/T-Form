@@ -3,6 +3,7 @@ import CreateTextQuestion from "./CreateTextQuestion";
 import { useQuestionTypeContext } from "../Context/QuestionTypeContext";
 import CreateMcqQuestion from "./CreateMcqQuestion";
 import CreateImageQuestion from "./CreateImageQuestion";
+import CreateFormDetails from "./CreateFormDetails";
 
 const RenderQuestion = () => {
   const { questionType } = useQuestionTypeContext();
@@ -23,6 +24,12 @@ const RenderQuestion = () => {
       return (
         <div>
           <CreateImageQuestion />
+        </div>
+      );
+    case "details":
+      return (
+        <div>
+          <CreateFormDetails />
         </div>
       );
     default:

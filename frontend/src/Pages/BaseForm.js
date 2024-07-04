@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 import RenderQuestion from "../Components/RenderQuestion";
@@ -16,7 +16,7 @@ const BaseForm = () => {
     <>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col items-center justify-center">
+        <div className="drawer-content flex flex-col items-center justify-start">
           {/* Page content here */}
           <div className="w-full flex flex-row px-4 py-5">
             <label
@@ -46,6 +46,15 @@ const BaseForm = () => {
 
             <div className="divider divider-primary lg:hidden"></div>
 
+            <li className="m-1">
+              <button
+                onClick={(e) => {
+                  setQuestionType("details");
+                }}
+              >
+                Add Form Details
+              </button>
+            </li>
             <li className="m-1">
               <button
                 onClick={(e) => {

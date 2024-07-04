@@ -38,6 +38,8 @@ const CreateImageQuestion = () => {
         toast.error(error.message);
         console.error("Error uploading image: ", error);
       }
+    } else {
+      toast.error("Need to select an Image and write the question");
     }
   };
 
@@ -49,6 +51,7 @@ const CreateImageQuestion = () => {
           type="file"
           onChange={(e) => setPicture(e.target.files[0])}
           className="text-xl py-5 w-[49%] lg:w-full text-white"
+          required
         />
       </div>
       <label className="text-2xl mb-2">Enter the question</label>
@@ -57,6 +60,7 @@ const CreateImageQuestion = () => {
         value={newQuestion}
         onChange={(e) => setNewQuestion(e.target.value)}
         className="w-4/5 px-3 py-2 border border-gray-400 rounded my-4 mx-[88px] hover:border-blue-500"
+        required
       />
       <button
         type="button"
