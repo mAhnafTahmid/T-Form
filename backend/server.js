@@ -3,6 +3,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import userRouter from "./Routes/userRoute.js";
+
 const app = express();
 
 dotenv.config();
@@ -14,6 +16,7 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
+app.use("/user", userRouter);
 
 app.get("/*", async (req, res) => {
   res.status(200).send("T-Form Server is up and running!");

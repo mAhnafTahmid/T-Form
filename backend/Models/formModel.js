@@ -1,18 +1,18 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const formSchema = mongoose.Schema({
-    code: {
-        type: String,
-        reqired: True,
-        unique: True
-    },
-    date: {
-        type: Date,
-        required: True
-    },
-    questions: {
-        type: []
-    }
-})
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  questions: {
+    type: Array,
+  },
+});
 
-export default mongoose.model('Form', formSchema)
+export default mongoose.model("Form", formSchema);
