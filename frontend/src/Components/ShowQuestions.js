@@ -59,9 +59,9 @@ const ShowQuestions = () => {
   }, [questions]);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full">
-      <div className="flex flex-row justify-between">
-        <h1 className="text-4xl text-red-500 pt-7 pb-5 px-7">{`Instruction: ${
+    <div className="flex flex-col justify-center items-center w-full flex-wrap">
+      <div className="w-full max-w-full lg:max-w-4xl overflow-hidden">
+        <h1 className="text-4xl text-red-500 pt-7 pb-5 px-7 break-words">{`Instruction: ${
           description ? description.description : "Not Set"
         }`}</h1>
         <h1 className="text-4xl text-red-500 pt-7 pb-5 px-7 ">{`Number of tries: ${
@@ -71,10 +71,10 @@ const ShowQuestions = () => {
       {questions.map((q, index) => (
         <div
           key={index}
-          className="mt-5 mb-5 text-center flex flex-col justify-center items-center w-full"
+          className="my-5 text-center flex flex-col justify-center items-center w-full"
         >
           {q.questionType !== "details" && (
-            <label className="text-3xl text-yellow-300">
+            <label className="text-3xl text-yellow-300  max-w-full lg:max-w-4xl overflow-hidden break-words">
               Q{index + 1}. {q.newQuestion}
             </label>
           )}

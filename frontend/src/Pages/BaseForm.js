@@ -16,7 +16,7 @@ const BaseForm = () => {
     <>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col items-center justify-start">
+        <div className="drawer-content flex flex-col items-center justify-start mt-[50px]">
           {/* Page content here */}
           <div className="w-full flex flex-row px-4 py-5">
             <label
@@ -29,7 +29,7 @@ const BaseForm = () => {
 
           <ShowQuestions />
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side mt-[64px]">
           <label
             htmlFor="my-drawer-2"
             aria-label="close sidebar"

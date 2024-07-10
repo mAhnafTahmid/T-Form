@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
+import useSignup from "../Hook/useSignup";
 
 const Signup = () => {
   const [passwordFieldType, setPasswordFieldType] = useState("password");
@@ -11,6 +12,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { loading, signup } = useSignup();
 
   const handlePasswordShow = (e) => {
     e.preventDefault();
@@ -26,25 +28,10 @@ const Signup = () => {
     );
   };
 
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          name,
-          password,
-          confirmPassword,
-        }),
-      });
-      if (res.success) {
-        const data = await res.json();
-        localStorage.setItem("user", data);
-        toast.success("Signed up successfully");
-      } else {
-        toast.error("Failed to signup");
-      }
+      await signup({ email, name, password, confirmPassword });
     } catch (error) {
       console.log("Error signing up", error.message);
     }

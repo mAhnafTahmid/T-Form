@@ -5,15 +5,18 @@ import Paths from "./Paths";
 import reportWebVitals from "./reportWebVitals";
 import { QuestionTypeContextProvider } from "./Context/QuestionTypeContext";
 import { QuestionsContextProvider } from "./Context/QuestionsContext";
+import { AuthContextProvider } from "./Context/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <QuestionTypeContextProvider>
-      <QuestionsContextProvider>
-        <Paths />
-      </QuestionsContextProvider>
-    </QuestionTypeContextProvider>
+    <AuthContextProvider>
+      <QuestionTypeContextProvider>
+        <QuestionsContextProvider>
+          <Paths />
+        </QuestionsContextProvider>
+      </QuestionTypeContextProvider>
+    </AuthContextProvider>
   </React.StrictMode>
 );
 
