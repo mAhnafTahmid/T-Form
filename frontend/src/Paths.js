@@ -8,20 +8,34 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Header from "./Components/Header";
 import LandingPage from "./Pages/LandingPage";
+import ProfilePage from "./Pages/ProfilePage";
+import { useAuthContext } from "./Context/AuthContext";
 
 const Paths = () => {
+  const { user } = useAuthContext();
   return (
     <>
       <BrowserRouter>
         <Toaster />
         <Header />
         <Routes>
-          <Route exact path="/" element={<BaseForm />} />
-          <Route path="/form" element={<Form />} />
-          <Route path="/app" element={<App />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/landing" element={<LandingPage />} />
+          <Route exact path="/" element={<LandingPage />} />
+          <Route
+            path="/form"
+            element={user?.length !== 0 ? <BaseForm /> : <Login />}
+          />
+          <Route
+            path="/login"
+            element={user?.length !== 0 ? <ProfilePage /> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={user?.length !== 0 ? <ProfilePage /> : <Signup />}
+          />
+          <Route
+            path="/profile"
+            element={user?.length !== 0 ? <ProfilePage /> : <Login />}
+          />
         </Routes>
       </BrowserRouter>
     </>

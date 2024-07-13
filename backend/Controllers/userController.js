@@ -31,6 +31,7 @@ export const userSignup = async (req, res) => {
       _id: newUser._id,
       email: newUser.email,
       name: newUser.name,
+      codes: newUser.codes,
     });
   } catch (error) {
     console.error("Server error in signing up:", error.message);
@@ -55,6 +56,7 @@ export const userLogin = async (req, res) => {
       _id: user._id,
       email: user.email,
       name: user.name,
+      codes: user.codes,
     });
   } catch (error) {
     console.error("Server error in logging in:", error.message);
@@ -75,4 +77,10 @@ export const userLogout = async (req, res) => {
     console.error("Server error in logging out:", error.message);
     res.status(500).json({ error: "Server error" });
   }
+};
+
+export const getUserAttemptedCodes = async (req, res) => {
+  try {
+    const userId = req.user._id;
+  } catch (error) {}
 };

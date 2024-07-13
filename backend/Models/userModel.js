@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const userSchema = mongoose.Schema({
   name: {
@@ -14,13 +15,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  codes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Form",
-      default: [],
-    },
-  ],
+  codes: {
+    type: Array,
+    default: [],
+  },
 });
 
 export default mongoose.model("User", userSchema);
