@@ -78,9 +78,3 @@ export const userLogout = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
-export const getUserAttemptedCodes = async (req, res) => {
-  try {
-    const userId = req.user._id;
-  } catch (error) {}
-};

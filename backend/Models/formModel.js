@@ -6,12 +6,12 @@ const formSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  date: {
-    type: Date,
-    required: true,
-  },
   questions: {
     type: Array,
+  },
+  answers: {
+    type: Array,
+    default: [],
   },
 });
 
